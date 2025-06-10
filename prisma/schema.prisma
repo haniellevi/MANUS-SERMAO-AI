@@ -1,0 +1,120 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  clerkId   String   @unique
+  email     String   @unique
+  name      String?
+  imageUrl  String?
+  plan      Plan     @default(FREE)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // DNA do pregador
+  dna       PreacherDna?
+  
+  // Sermões
+  sermons   Sermon[]
+  
+  // Métricas de uso
+  usage     UserUsage?
+
+  @@map("users")
+}
+
+model PreacherDna {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Características do DNA
+  style       String?  // Estilo de pregação
+  tone        String?  // Tom da pregação
+  vocabulary  String?  // Nível de vocabulário
+  structure   String?  // Estrutura preferida
+  
+  // Análise de conteúdo
+  strengths   String[] // Pontos fortes
+  themes      String[] // Temas recorrentes
+  
+  // Análise de vídeo (se disponível)
+  wordsPerMinute Int?   // Palavras por minuto
+  avgDuration    Int?   // Duração média em minutos
+  
+  // Metadados
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("preacher_dnas")
+}
+
+model Sermon {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Conteúdo do sermão
+  title       String
+  content     String   @db.Text
+  theme       String?
+  purpose     String?
+  audience    String?
+  duration    Int?     // Duração em minutos
+  
+  // Metadados de geração
+  prompt      String?  @db.Text
+  quality     Float?   // Avaliação de qualidade (0-10)
+  
+  // Status
+  status      SermonStatus @default(DRAFT)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("sermons")
+}
+
+model UserUsage {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Contadores mensais
+  sermonsThisMonth    Int @default(0)
+  sermonsTotal        Int @default(0)
+  
+  // Limites por plano
+  monthlyLimit        Int @default(0)
+  
+  // Reset mensal
+  lastReset          DateTime @default(now())
+  
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@map("user_usage")
+}
+
+enum Plan {
+  FREE
+  BASIC
+  PRO
+}
+
+enum SermonStatus {
+  DRAFT
+  COMPLETED
+  ARCHIVED
+}
+
