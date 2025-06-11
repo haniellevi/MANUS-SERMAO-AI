@@ -2,15 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: '3000-imm5ceaypszni61prwuf0-a3a9c240.manusvm.computer',
-        port: '',
-        pathname: '/**', 
-      },
-    ],
-    domains: ["lh3.googleusercontent.com", "vercel.com", "3000-imm5ceaypszni61prwuf0-a3a9c240.manusvm.computer"],
+    domains: ["lh3.googleusercontent.com", "vercel.com"],
   },
   eslint: {
     ignoreDuringBuilds: true,
