@@ -2,7 +2,15 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ["lh3.googleusercontent.com", "vercel.com"],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '3000-imm5ceaypszni61prwuf0-a3a9c240.manusvm.computer',
+        port: '',
+        pathname: '/**', 
+      },
+    ],
+    domains: ["lh3.googleusercontent.com", "vercel.com", "3000-imm5ceaypszni61prwuf0-a3a9c240.manusvm.computer"],
   },
   eslint: {
     ignoreDuringBuilds: true,
@@ -19,12 +27,9 @@ const nextConfig = {
       },
     ];
   },
-  devIndicators: {
-    buildActivity: false,
-  },
+
   experimental: {
-    allowedNextImageDomains: ["lh3.googleusercontent.com", "vercel.com"],
-    serverComponentsExternalPackages: ["@prisma/client", "@clerk/nextjs"],
+    serverExternalPackages: ["@prisma/client", "@clerk/nextjs"],
   },
   compiler: {
     removeConsole: process.env.NODE_ENV === "production",

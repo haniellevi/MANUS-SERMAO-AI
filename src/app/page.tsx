@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 import LandingPage from '@/components/LandingPage'
 
 export default async function Home() {
-  const { userId } = await auth()
+  const { userId } = auth()
   
   if (userId) {
     redirect('/dashboard')
@@ -11,4 +11,5 @@ export default async function Home() {
 
   return <LandingPage />
 }
+
 
