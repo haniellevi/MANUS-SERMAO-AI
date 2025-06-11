@@ -28,9 +28,7 @@ const nextConfig = {
     ];
   },
 
-  experimental: {
-    serverExternalPackages: ["@prisma/client", "@clerk/nextjs"],
-  },
+
   compiler: {
     removeConsole: process.env.NODE_ENV === "production",
   },
